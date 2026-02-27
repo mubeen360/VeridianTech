@@ -1,7 +1,19 @@
+import { Link, useNavigate } from "react-router-dom";
 import { Github, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const scrollTo = (target: string, offset: number) => {
+    if (window.location.pathname !== "/") {
+      navigate("/#" + target);
+      return;
+    }
     const el = document.getElementById(target);
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY + offset;
@@ -12,18 +24,18 @@ const Footer = () => {
   return (
     <footer className="border-t border-border bg-card">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
+          <div className="lg:col-span-2">
+            <button onClick={handleLogoClick} className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center font-heading font-bold text-primary-foreground text-lg">
                 V
               </div>
               <span className="font-heading font-semibold text-lg text-foreground">
                 Veridian<span className="text-veridian-glow">Tech</span>
               </span>
-            </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            </button>
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
               Innovate. Integrate. Elevate. We engineer world-class digital products that drive growth.
             </p>
           </div>
@@ -50,14 +62,25 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Legal */}
           <div>
-            <h4 className="font-heading font-semibold text-foreground mb-4">Services</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Web App Development</li>
-              <li>Mobile App Development</li>
-              <li>UI/UX & Branding</li>
-              <li>Digital Marketing & SEO</li>
+            <h4 className="font-heading font-semibold text-foreground mb-4">Legal</h4>
+            <ul className="space-y-2">
+              {[
+                { label: "Privacy Policy", to: "/privacy-policy" },
+                { label: "Terms of Service", to: "/terms-of-service" },
+                { label: "Refund Policy", to: "/refund-policy" },
+                { label: "Shipping Policy", to: "/shipping-policy" },
+              ].map((link) => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="text-sm text-muted-foreground hover:text-veridian-glow transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

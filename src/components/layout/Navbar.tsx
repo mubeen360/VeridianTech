@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useTheme } from "@/context/ThemeContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const navLinks = [
   { label: "Home", target: "home", offset: 0 },
@@ -22,6 +23,8 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const activeSection = useActiveSection(sectionIds);
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -31,13 +34,19 @@ const Navbar = () => {
 
   const scrollTo = useCallback((target: string, offset: number) => {
     setMobileOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate(`/#${target}`);
+      return;
+    }
+
     const el = document.getElementById(target);
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY + offset;
       window.scrollTo({ top, behavior: "smooth" });
       window.history.replaceState(null, "", `#${target}`);
     }
-  }, []);
+  }, [location.pathname, navigate]);
 
   return (
     <motion.header
@@ -64,11 +73,10 @@ const Navbar = () => {
               <button
                 key={link.target}
                 onClick={() => scrollTo(link.target, link.offset)}
-                className={`relative text-sm font-medium transition-colors hover:text-foreground ${
-                  activeSection === link.target
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
+                className={`relative text-sm font-medium transition-colors hover:text-foreground ${activeSection === link.target
+                  ? "text-foreground"
+                  : "text-muted-foreground"
+                  }`}
               >
                 {link.label}
                 {activeSection === link.target && (
@@ -172,11 +180,10 @@ const Navbar = () => {
                 >
                   <button
                     onClick={() => scrollTo(link.target, link.offset)}
-                    className={`block text-lg font-medium py-2 w-full text-left ${
-                      activeSection === link.target
-                        ? "text-veridian-glow"
-                        : "text-muted-foreground"
-                    }`}
+                    className={`block text-lg font-medium py-2 w-full text-left ${activeSection === link.target
+                      ? "text-veridian-glow"
+                      : "text-muted-foreground"
+                      }`}
                   >
                     {link.label}
                   </button>

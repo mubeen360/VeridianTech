@@ -150,6 +150,8 @@ const Contact = () => {
                           <SelectItem value="mobile">Mobile App Development</SelectItem>
                           <SelectItem value="design">UI/UX & Branding</SelectItem>
                           <SelectItem value="marketing">Digital Marketing & SEO</SelectItem>
+                          <SelectItem value="cloud">Cloud Solutions</SelectItem>
+                          <SelectItem value="security">Cybersecurity</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
